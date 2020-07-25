@@ -6,7 +6,10 @@ import {
   scaleLinear,
   interpolateHcl,
   axisBottom,
-  timeFormat
+  timeFormat,
+  timeHour, timeDay, timeWeek, timeMonth,
+  timeSunday, timeMonday, timeTuesday, timeWednesday,
+  timeThursday, timeFriday, timeSaturday
 } from 'd3';
 import { parser } from './parser/gantt';
 import common from '../common/common';
@@ -302,7 +305,7 @@ export const draw = function(text, id) {
         }
 
         let secNum = 0;
-        console.log(conf);
+        // console.log(conf);
         for (let i = 0; i < categories.length; i++) {
           if (d.type === categories[i]) {
             secNum = i % conf.numberSectionStyles;
@@ -358,7 +361,10 @@ export const draw = function(text, id) {
   function makeGrid(theSidePad, theTopPad, w, h) {
     let xAxis = axisBottom(timeScale)
       .tickSize(-h + theTopPad + conf.gridLineStartPadding)
-      .tickFormat(timeFormat(parser.yy.getAxisFormat() || conf.axisFormat || '%Y-%m-%d'));
+      .tickFormat(timeFormat(parser.yy.getAxisFormat() || conf.axisFormat || '%Y-%m-%d'))
+      .ticks(timeWednesday)
+
+    console.log(parser.yy.getTickInterval());
 
     svg
       .append('g')
