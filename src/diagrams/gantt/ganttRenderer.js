@@ -6,10 +6,10 @@ import {
   scaleLinear,
   interpolateHcl,
   axisBottom,
-  timeFormat
-  // timeHour, timeDay, timeWeek, timeMonth,
-  // timeSunday, timeMonday, timeTuesday, timeWednesday,
-  // timeThursday, timeFriday, timeSaturday
+  timeFormat,
+  timeHour, timeDay, timeWeek, timeMonth,
+  timeSunday, timeMonday, timeTuesday, timeWednesday,
+  timeThursday, timeFriday, timeSaturday
 } from 'd3';
 import { parser } from './parser/gantt';
 import common from '../common/common';
@@ -359,12 +359,31 @@ export const draw = function(text, id) {
   }
 
   function makeGrid(theSidePad, theTopPad, w, h) {
+    const tickIntervalMap = {
+      'timeHour': timeHour,
+      'timeDay': timeDay,
+      'timeWeek': timeWeek,
+      'timeMonth': timeMonth,
+      'timeSunday': timeSunday,
+      'timeMonday': timeMonday,
+      'timeTuesday': timeTuesday,
+      'timeWednesday': timeWednesday,
+      'timeThursday': timeThursday,
+      'timeFriday': timeFriday,
+      'timeSaturday': timeSaturday
+    }
+    
     let xAxis = axisBottom(timeScale)
       .tickSize(-h + theTopPad + conf.gridLineStartPadding)
-      .tickFormat(timeFormat(parser.yy.getAxisFormat() || conf.axisFormat || '%Y-%m-%d'));
-    // .ticks(timeWednesday)
-
-    console.log(parser.yy.getTickInterval());
+      .tickFormat(timeFormat(parser.yy.getAxisFormat() || conf.axisFormat || '%Y-%m-%d'))
+      .ticks(tickIntervalMap[parser.yy.getTickInterval()] || tickIntervalMap[conf.tickInterval] || null);
+      
+      console.log({
+        'parser.yy.getTickInterval()': parser.yy.getTickInterval(),
+        'conf.tickInterval': conf.tickInterval,
+        'tickIntervalMap[parser.yy.getTickInterval()]': tickIntervalMap[parser.yy.getTickInterval()],
+        'tickIntervalMap[conf.tickInterval]': tickIntervalMap[conf.tickInterval]
+      });
 
     svg
       .append('g')

@@ -153,5 +153,15 @@ describe('when parsing a gantt diagram it', function() {
     const args = '"test1", "test2", "test3"';
     expect(ganttDb.setClickEvent).toHaveBeenCalledWith('cl2', 'ganttTestClick', '"test0", test1, test2');
   });
+  it('should handle a tickInterval definition', function() {
+    spyOn(ganttDb, 'setTickInterval');
+    const str =
+      'gantt\n' + 
+      'dateFormat yyyy-mm-dd\n' + 
+      'title Adding gantt diagram functionality to mermaid\n' +
+      'tickInterval timeFriday\n';
 
+    expect(parserFnConstructor(str)).not.toThrow();
+    expect(ganttDb.setTickInterval).toHaveBeenCalledWith('timeFriday');
+  });
 });
